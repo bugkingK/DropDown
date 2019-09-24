@@ -32,14 +32,14 @@ class BKDropDown: UIViewController {
     private struct Appearance {
         struct Title {
             var textNormal:UIColor = .black
-            var textHighlight:UIColor = .black
+            var textHighlight:UIColor = .white
             var font:UIFont = .systemFont(ofSize: 12)
             var alignment:NSTextAlignment = .left
         }
         
         struct Cell {
             var viewNormal:UIColor = .white
-            var viewHighlight:UIColor = .red
+            var viewHighlight:UIColor = .lightGray
             var rowHeight:CGFloat = 25
             var visibleItems:Int?
             var divisionColor:UIColor?
@@ -97,6 +97,20 @@ class BKDropDown: UIViewController {
     static public func instance() -> BKDropDown {
         return UIStoryboard(name: "BKDropDown", bundle: nil)
         .instantiateViewController(withIdentifier: "BKDropDown") as! BKDropDown
+    }
+    
+    public func bind(_ items:[String], first:Int?=nil) -> BKDropDown {
+        if let first = first {
+            assert(first > -1, "It cannot be negative.")
+            assert(items.count > first, "OverFlows, You cannot exceed the range of items.")
+        }
+        var tmpArray:[BKItem] = []
+        for item in items {
+            tmpArray.append(BKItem(title: item, image: nil))
+        }
+        arrItems = tmpArray
+        firstItem = first
+        return self
     }
     
     public func bind(_ items:[BKItem], first:Int?=nil) -> BKDropDown {
@@ -206,10 +220,11 @@ class BKDropDown: UIViewController {
             self.rootViewY.constant = targetFrame.origin.y + targetFrame.height
             self.tableViewWidth.constant = targetFrame.size.width
             // 보여줄 Cell의 갯수를 입력받으면 제한을 건다
+            let rowHeight = self.appearance.cell.rowHeight
             if let visibleItems = self.appearance.cell.visibleItems {
-                self.tableViewHeight.constant = (CGFloat(visibleItems) * self.appearance.cell.rowHeight)
+                self.tableViewHeight.constant = CGFloat(visibleItems) * rowHeight + rowHeight/2
             } else {
-                self.tableViewHeight.constant = (CGFloat(self.arrItems.count) * self.appearance.cell.rowHeight)
+                self.tableViewHeight.constant = CGFloat(self.arrItems.count) * rowHeight
             }
 
             var targetViewHeight:CGFloat = target.view.frame.height
@@ -320,13 +335,21 @@ class BKDropDownCell: UITableViewCell {
     @IBOutlet fileprivate weak var ivLogo:UIImageView?
     
     fileprivate var divisionView:UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        let selectionView = UIView.init()
-        self.selectedBackgroundView = selectionView
-        divisionView = UIView(frame: CGRect(x: 10, y: self.frame.height-1.0, width: self.frame.width-20.0, height: 1))
-        divisionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        let selectionView = UIView(frame: frame)
+        selectedBackgroundView = selectionView
+        
+        divisionView = UIView()
+        divisionView.translatesAutoresizingMaskIntoConstraints = false
         selectionView.addSubview(divisionView)
-        self.addSubview(divisionView)
+        NSLayoutConstraint.activate([
+            divisionView.bottomAnchor.constraint(equalTo: selectionView.bottomAnchor),
+            divisionView.leadingAnchor.constraint(equalTo: selectionView.leadingAnchor),
+            divisionView.trailingAnchor.constraint(equalTo: selectionView.trailingAnchor),
+            divisionView.heightAnchor.constraint(equalToConstant: 1)
+        ])
+        addSubview(divisionView)
     }
 }

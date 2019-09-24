@@ -11,34 +11,16 @@ import UIKit
 class ViewController: UIViewController {
     
     private var dropDown:BKDropDown!
-    private var dropDown2:BKDropDown!
-    
-    var bTest = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let items:[BKItem] = [
-            BKItem(title: "하이1", image: nil),
-            BKItem(title: "하이2", image: UIImage(named: "Image")),
-            BKItem(title: "하이3", image: nil),
-            BKItem(title: "하이4", image: nil),
-            BKItem(title: "하이5", image: nil),
-        ]
         dropDown = BKDropDown.instance()
-            .bind(items, first: 2)
-            .setLayoutCell(normal: .gray)
-            .setLayoutTitle(alignment: .center)
-            .setPadding(top: 10, bottom: 10)
-            .setDidSelectRowAt({ (idx, dropDown) in
-                dropDown.hide()
-            })
-        
-        dropDown2 = BKDropDown.instance()
-            .bind(items, first: 1)
-            .setLayoutCell(normal: .white, divisionColor: .green)
-            .setLayoutTitle(alignment: .center)
-            .setViewLayer(cornerRadius: 5, borderWidth: 1, borderColor: .lightGray)
+            .bind(["하이", "안녕", "반가워", "하하"], first: 2)
+            .setViewLayer(cornerRadius: 5)
+            .setLayoutCell(visibleItems: 2, divisionColor: .blue)
+            .setLayoutCell(normal: .white, height: 50)
+            .setLayoutTitle(normal:.black, highlight:.white ,font: UIFont.systemFont(ofSize: 15), alignment: .center)
             .setPadding(top: 10, bottom: 10)
             .setDidSelectRowAt({ (idx, dropDown) in
                 dropDown.hide()
@@ -46,13 +28,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func onClickButton(_ sender: UIButton) {
-        bTest = !bTest
-        if bTest {
-            dropDown.show(self, targetView: sender)
-        } else {
-            dropDown2.show(self, targetView: sender)
-        }
-        
+        dropDown.show(self, targetView: sender)
     }
     
 }
