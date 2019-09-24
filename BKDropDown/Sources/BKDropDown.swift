@@ -31,14 +31,14 @@ class BKDropDown: UIViewController {
         struct Title {
             var textNormal:UIColor = .black
             var textHighlight:UIColor = .white
-            var font:UIFont = .systemFont(ofSize: 12)
-            var alignment:NSTextAlignment = .left
+            var font:UIFont = .systemFont(ofSize: 14)
+            var alignment:NSTextAlignment = .center
         }
         
         struct Cell {
             var viewNormal:UIColor = .white
             var viewHighlight:UIColor = .lightGray
-            var rowHeight:CGFloat = 25
+            var rowHeight:CGFloat = 50
             var rowWidth:CGFloat?
             var visibleItems:Int?
         }
@@ -70,7 +70,7 @@ class BKDropDown: UIViewController {
     private var mPrevItem:Int?
     
     /// setDelayAnimation
-    private var delayAnimation:TimeInterval = 0.15
+    private var delayAnimation:TimeInterval = 0.2
     
     /// setDidSelectRowAt
     typealias EVENT = (Int, BKItem, BKDropDown)->()
@@ -90,7 +90,7 @@ class BKDropDown: UIViewController {
     //MARK:- @Public
     static public func instance() -> BKDropDown {
         return UIStoryboard(name: "BKDropDown", bundle: nil)
-        .instantiateViewController(withIdentifier: "BKDropDown") as! BKDropDown
+                .instantiateViewController(withIdentifier: "BKDropDown") as! BKDropDown
     }
     
     public func bind(_ items:[String], first:Int?=nil) -> BKDropDown {

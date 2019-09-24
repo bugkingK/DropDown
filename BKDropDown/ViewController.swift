@@ -44,11 +44,12 @@ class ViewController: UIViewController {
                 dropDown.hide()
             })
         
+        let cellNormal = UIColor.init(red: 203/255, green: 131/255, blue: 111/255, alpha: 1)
+        let cellHighlight = UIColor.init(red: 163/255, green: 105/255, blue: 88/255, alpha: 1)
         dropDownRight = BKDropDown.instance()
             .bind(["Item 1", "Item 2", "Item 3", "Item 4"])
-            .setLayoutCell(normal: .white, highlight: .lightGray, height: 50)
-            .setLayoutTitle(normal: .darkGray, highlight: .darkGray ,font: UIFont.systemFont(ofSize: 14))
-            .setPadding(leading: 20, trailing: 20)
+            .setLayoutCell(normal: cellNormal, highlight: cellHighlight, height: 50)
+            .setLayoutTitle(normal: .black, highlight: .black)
             .setDidSelectRowAt({ (_, item, dropDown) in
                 self.lbDropDownRight.text = item.title
                 dropDown.hide()
@@ -61,7 +62,9 @@ class ViewController: UIViewController {
                 .setLayoutCell(width:sender.frame.width - 10)
                 .show(self, targetView: sender)
         } else {
-            dropDownRight.show(self, targetView: sender)
+            dropDownRight
+                .setLayoutCell(width:sender.frame.width - 10)
+                .show(self, targetView: sender)
         }
     }
     
