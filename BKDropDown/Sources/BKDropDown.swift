@@ -46,14 +46,23 @@ class BKDropDown: UIViewController {
         }
         
         struct Padding {
-            var top:CGFloat = 5
-            var bottom:CGFloat = 5
-            var leading:CGFloat = 15
-            var trailing:CGFloat = 15
+            var top:CGFloat = 0
+            var bottom:CGFloat = 0
+            var leading:CGFloat = 0
+            var trailing:CGFloat = 0
         }
+        
+        struct View {
+            var cornerRadius:CGFloat = 0
+            var borderWidth:CGFloat = 0
+            var borderColor:UIColor = .lightGray
+            var backgroundColor:UIColor = .white
+        }
+        
         var title = Title()
         var cell = Cell()
         var padding = Padding()
+        var view = View()
     }
     private var appearance = Appearance()
     
@@ -65,9 +74,6 @@ class BKDropDown: UIViewController {
     /// setDelayAnimation
     private var delayAnimation:TimeInterval = 0.15
     
-    /// setLayoutCornerRadius
-    private var rootViewCornerRadius:CGFloat = 0
-    
     /// setDidSelectRowAt
     typealias EVENT = (Int, BKDropDown)->()
     private var didSelectEvent:EVENT?
@@ -76,11 +82,11 @@ class BKDropDown: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         rootView.alpha = 0
-        rootView.layer.borderWidth = 0.5
-        rootView.layer.borderColor = UIColor.lightGray.cgColor
-        rootView.layer.cornerRadius = rootViewCornerRadius
-        rootView.backgroundColor = .white
-        tableView.backgroundColor = .gray
+        rootView.layer.borderWidth = appearance.view.borderWidth
+        rootView.layer.borderColor = appearance.view.borderColor.cgColor
+        rootView.layer.cornerRadius = appearance.view.cornerRadius
+        rootView.backgroundColor = appearance.view.backgroundColor
+        tableView.backgroundColor = appearance.view.backgroundColor
     }
     
     deinit {
@@ -120,7 +126,7 @@ class BKDropDown: UIViewController {
         return self
     }
     
-    public func setLayoutCell(normal:UIColor?=nil, highlight:UIColor?=nil, height:CGFloat?=nil, visibleItems:Int?=nil) -> BKDropDown {
+    public func setLayoutCell(normal:UIColor?=nil, highlight:UIColor?=nil, height:CGFloat?=nil, visibleItems:Int?=nil, divisionColor:UIColor?=nil) -> BKDropDown {
         if let normal = normal {
             appearance.cell.viewNormal = normal
         }
@@ -133,38 +139,48 @@ class BKDropDown: UIViewController {
         if let visibleItems = visibleItems {
             appearance.cell.visibleItems = visibleItems
         }
+        if let divisionColor = divisionColor {
+            appearance.cell.divisionColor = divisionColor
+        }
         return self
     }
     
     public func setPadding(top:CGFloat?=nil, bottom:CGFloat?=nil, leading:CGFloat?=nil, trailing:CGFloat?=nil) -> BKDropDown {
-        appearance.padding.top = top ?? 0
-        appearance.padding.bottom = bottom ?? 0
-        appearance.padding.leading = leading ?? 0
-        appearance.padding.trailing = trailing ?? 0
+        if let top = top {
+            appearance.padding.top = top
+        }
+        if let bottom = bottom {
+            appearance.padding.bottom = bottom
+        }
+        if let leading = leading {
+            appearance.padding.leading = leading
+        }
+        if let trailing = trailing {
+            appearance.padding.trailing = trailing
+        }
         return self
     }
     
-    public func setLayer(cornerRadius:CGFloat?=nil, borderWidth:CGFloat?=nil, borderColor:UIColor?=nil) -> BKDropDown {
-        
-        return self
-    }
-    public func setCornerRadius(_ radius:CGFloat) -> BKDropDown {
-        rootViewCornerRadius = radius
-        return self
-    }
-    
-    public func setDidSelectRowAt(_ event:@escaping EVENT) -> BKDropDown {
-        didSelectEvent = event
-        return self
-    }
-    
-    public func setDivisionColor(_ color:UIColor) -> BKDropDown {
-        appearance.cell.divisionColor = color
+    public func setViewLayer(cornerRadius:CGFloat?=nil, borderWidth:CGFloat?=nil, borderColor:UIColor?=nil) -> BKDropDown {
+        if let cornerRadius = cornerRadius {
+            appearance.view.cornerRadius = cornerRadius
+        }
+        if let borderWidth = borderWidth {
+            appearance.view.borderWidth = borderWidth
+        }
+        if let borderColor = borderColor {
+            appearance.view.borderColor = borderColor
+        }
         return self
     }
     
     public func setDelayAnimation(_ interval:TimeInterval) -> BKDropDown {
         delayAnimation = interval
+        return self
+    }
+    
+    public func setDidSelectRowAt(_ event:@escaping EVENT) -> BKDropDown {
+        didSelectEvent = event
         return self
     }
     
@@ -190,11 +206,13 @@ class BKDropDown: UIViewController {
             self.rootViewY.constant = targetFrame.origin.y + targetFrame.height
             self.tableViewWidth.constant = targetFrame.size.width
             // 보여줄 Cell의 갯수를 입력받으면 제한을 건다
-            let visibleItems = self.appearance.cell.visibleItems == nil ? self.arrItems.count : self.appearance.cell.visibleItems!
-            self.tableViewHeight.constant = (CGFloat(visibleItems) * self.appearance.cell.rowHeight)
-            
+            if let visibleItems = self.appearance.cell.visibleItems {
+                self.tableViewHeight.constant = (CGFloat(visibleItems) * self.appearance.cell.rowHeight)
+            } else {
+                self.tableViewHeight.constant = (CGFloat(self.arrItems.count) * self.appearance.cell.rowHeight)
+            }
+
             var targetViewHeight:CGFloat = target.view.frame.height
-            
             if #available(iOS 11.0, *) {
                 targetViewHeight = target.view.frame.height - (target.view.safeAreaInsets.top + target.view.safeAreaInsets.bottom)
             }

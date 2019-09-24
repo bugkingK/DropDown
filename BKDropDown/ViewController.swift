@@ -27,11 +27,9 @@ class ViewController: UIViewController {
         ]
         dropDown = BKDropDown.instance()
             .bind(items, first: 2)
-            .setLayoutCell(visibleItems: 2)
             .setLayoutCell(normal: .gray)
             .setLayoutTitle(alignment: .center)
             .setPadding(top: 10, bottom: 10)
-            .setDivisionColor(.brown)
             .setDidSelectRowAt({ (idx, dropDown) in
                 dropDown.hide()
             })
@@ -41,7 +39,6 @@ class ViewController: UIViewController {
             .setLayoutCell(normal: .gray)
             .setLayoutTitle(alignment: .center)
             .setPadding(top: 10, bottom: 10)
-            .setDivisionColor(.brown)
             .setDidSelectRowAt({ (idx, dropDown) in
                 dropDown.hide()
             })
