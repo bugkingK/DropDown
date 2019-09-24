@@ -18,11 +18,14 @@ class ViewController: UIViewController {
         dropDown = BKDropDown.instance()
             .bind(["하이", "안녕", "반가워", "하하"], first: 2)
             .setViewLayer(cornerRadius: 5)
-            .setLayoutCell(visibleItems: 2, divisionColor: .blue)
+            .setLayoutCell(visibleItems: 2)
             .setLayoutCell(normal: .white, height: 50)
             .setLayoutTitle(normal:.black, highlight:.white ,font: UIFont.systemFont(ofSize: 15), alignment: .center)
             .setPadding(top: 10, bottom: 10)
             .setDidSelectRowAt({ (idx, dropDown) in
+                let vc = UIViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+                
                 dropDown.hide()
             })
     }

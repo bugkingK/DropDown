@@ -42,7 +42,6 @@ class BKDropDown: UIViewController {
             var viewHighlight:UIColor = .lightGray
             var rowHeight:CGFloat = 25
             var visibleItems:Int?
-            var divisionColor:UIColor?
         }
         
         struct Padding {
@@ -140,7 +139,7 @@ class BKDropDown: UIViewController {
         return self
     }
     
-    public func setLayoutCell(normal:UIColor?=nil, highlight:UIColor?=nil, height:CGFloat?=nil, visibleItems:Int?=nil, divisionColor:UIColor?=nil) -> BKDropDown {
+    public func setLayoutCell(normal:UIColor?=nil, highlight:UIColor?=nil, height:CGFloat?=nil, visibleItems:Int?=nil) -> BKDropDown {
         if let normal = normal {
             appearance.cell.viewNormal = normal
         }
@@ -152,9 +151,6 @@ class BKDropDown: UIViewController {
         }
         if let visibleItems = visibleItems {
             appearance.cell.visibleItems = visibleItems
-        }
-        if let divisionColor = divisionColor {
-            appearance.cell.divisionColor = divisionColor
         }
         return self
     }
@@ -309,14 +305,7 @@ extension BKDropDown: UITableViewDelegate, UITableViewDataSource {
         
         cell.backgroundColor = appearance.cell.viewNormal
         cell.selectedBackgroundView?.backgroundColor = appearance.cell.viewHighlight
-        
-        // Add Division Line
-        guard let divisionColor = appearance.cell.divisionColor else {
-            return cell
-        }
-        
-        cell.divisionView.backgroundColor = divisionColor
-        cell.divisionView.isHidden = row >= arrItems.count-1
+
         return cell
     }
     
@@ -334,22 +323,9 @@ class BKDropDownCell: UITableViewCell {
     @IBOutlet fileprivate weak var lbTitle:UILabel!
     @IBOutlet fileprivate weak var ivLogo:UIImageView?
     
-    fileprivate var divisionView:UIView!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         let selectionView = UIView(frame: frame)
         selectedBackgroundView = selectionView
-        
-        divisionView = UIView()
-        divisionView.translatesAutoresizingMaskIntoConstraints = false
-        selectionView.addSubview(divisionView)
-        NSLayoutConstraint.activate([
-            divisionView.bottomAnchor.constraint(equalTo: selectionView.bottomAnchor),
-            divisionView.leadingAnchor.constraint(equalTo: selectionView.leadingAnchor),
-            divisionView.trailingAnchor.constraint(equalTo: selectionView.trailingAnchor),
-            divisionView.heightAnchor.constraint(equalToConstant: 1)
-        ])
-        addSubview(divisionView)
     }
 }
