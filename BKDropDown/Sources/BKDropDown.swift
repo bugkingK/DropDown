@@ -88,10 +88,6 @@ class BKDropDown: UIViewController {
         tableView.backgroundColor = appearance.view.backgroundColor
     }
     
-    deinit {
-        print("BKDropDown Success")
-    }
-    
     //MARK:- @Public
     static public func instance() -> BKDropDown {
         return UIStoryboard(name: "BKDropDown", bundle: nil)
@@ -243,7 +239,7 @@ class BKDropDown: UIViewController {
                     let height1 = self.tableViewHeight.constant // 기존 사이즈
                     let height2 = targetFrame.origin.y - UIApplication.shared.statusBarFrame.height // 뷰에 표시할 수 있는 최상단
                     if height1 < height2 { // DropDown메뉴 크기가 작을 경우
-                        self.rootViewY.constant = targetFrame.origin.y - height1
+                        self.rootViewY.constant = targetFrame.origin.y - height1 - targetFrame.height
                         
                     } else {
                         self.tableViewHeight.constant = height2
