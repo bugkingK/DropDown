@@ -55,7 +55,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UEa-aP-jhO">
-                                                                    <rect key="frame" x="24" y="5.5" width="171" height="14.5"/>
+                                                                    <rect key="frame" x="24" y="5.5" width="176" height="14.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
@@ -68,7 +68,7 @@
                                                                 <constraint firstItem="UEa-aP-jhO" firstAttribute="centerY" secondItem="Skg-oS-csR" secondAttribute="centerY" id="GAk-wq-pgq"/>
                                                                 <constraint firstAttribute="bottom" secondItem="t9y-VY-udt" secondAttribute="bottom" constant="3" id="Tgu-cn-Udn"/>
                                                                 <constraint firstItem="t9y-VY-udt" firstAttribute="top" secondItem="Skg-oS-csR" secondAttribute="top" constant="3" id="hDI-cX-VZG"/>
-                                                                <constraint firstAttribute="trailing" secondItem="UEa-aP-jhO" secondAttribute="trailing" constant="5" id="zcb-kb-fbB"/>
+                                                                <constraint firstAttribute="trailing" secondItem="UEa-aP-jhO" secondAttribute="trailing" id="zcb-kb-fbB"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
@@ -83,6 +83,8 @@
                                                 <connections>
                                                     <outlet property="ivLogo" destination="t9y-VY-udt" id="VZ5-hm-meY"/>
                                                     <outlet property="lbTitle" destination="UEa-aP-jhO" id="Glk-HR-EkK"/>
+                                                    <outlet property="paddingLeading" destination="1uG-gr-QJT" id="Ddc-tW-Cte"/>
+                                                    <outlet property="paddingTrailing" destination="zcb-kb-fbB" id="nIn-0l-EXF"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="gray" indentationWidth="10" reuseIdentifier="BKDropDownCell" rowHeight="25" id="rSe-us-WdC" customClass="BKDropDownCell" customModule="BKDropDown" customModuleProvider="target">
@@ -96,7 +98,7 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="200" height="25"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8K0-Bt-eXe">
-                                                                    <rect key="frame" x="0.0" y="5.5" width="195" height="14.5"/>
+                                                                    <rect key="frame" x="0.0" y="5.5" width="200" height="14.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
@@ -106,7 +108,7 @@
                                                             <constraints>
                                                                 <constraint firstItem="8K0-Bt-eXe" firstAttribute="centerY" secondItem="99A-0g-RgT" secondAttribute="centerY" id="8aD-FI-BU8"/>
                                                                 <constraint firstItem="8K0-Bt-eXe" firstAttribute="leading" secondItem="99A-0g-RgT" secondAttribute="leading" id="Ta5-6s-ebd"/>
-                                                                <constraint firstAttribute="trailing" secondItem="8K0-Bt-eXe" secondAttribute="trailing" constant="5" id="ZAA-4p-SiR"/>
+                                                                <constraint firstAttribute="trailing" secondItem="8K0-Bt-eXe" secondAttribute="trailing" id="ZAA-4p-SiR"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
@@ -120,6 +122,8 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <outlet property="lbTitle" destination="8K0-Bt-eXe" id="U2i-K8-9sr"/>
+                                                    <outlet property="paddingLeading" destination="Ta5-6s-ebd" id="G5r-JW-GD9"/>
+                                                    <outlet property="paddingTrailing" destination="ZAA-4p-SiR" id="yHx-Ea-guQ"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -156,9 +160,7 @@
                         <outlet property="tableView" destination="W8t-Ts-Pem" id="aRC-3j-7B0"/>
                         <outlet property="tableViewBottom" destination="Hd8-08-98b" id="OB3-QD-LUY"/>
                         <outlet property="tableViewHeight" destination="pw6-se-law" id="IKW-is-Cet"/>
-                        <outlet property="tableViewLeading" destination="Zbp-et-n1w" id="uyH-Ck-dtE"/>
                         <outlet property="tableViewTop" destination="izK-2v-iAZ" id="63s-mY-0ha"/>
-                        <outlet property="tableViewTrailing" destination="bqt-2F-g4J" id="l7k-IH-4Eu"/>
                         <outlet property="tableViewWidth" destination="Xby-uX-U5M" id="Q3e-yh-HJf"/>
                     </connections>
                 </viewController>

@@ -10,28 +10,59 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private var dropDown:BKDropDown!
+    @IBOutlet weak var vwDropDownLeft: UIView!
+    @IBOutlet weak var vwDropDownRight: UIView!
+    
+    @IBOutlet weak var lbDropDownLeft: UILabel!
+    @IBOutlet weak var lbDropDownRight: UILabel!
+    
+    private var dropDownLeft:BKDropDown!
+    private var dropDownRight:BKDropDown!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        dropDown = BKDropDown.instance()
-            .bind(["하이", "안녕", "반가워", "하하"], first: 2)
-            .setViewLayer(cornerRadius: 5)
-            .setLayoutCell(visibleItems: 2)
-            .setLayoutCell(normal: .white, height: 50)
-            .setLayoutTitle(normal:.black, highlight:.white ,font: UIFont.systemFont(ofSize: 15), alignment: .center)
-            .setPadding(top: 10, bottom: 10)
-            .setDidSelectRowAt({ (idx, dropDown) in
-                let vc = UIViewController()
-                self.navigationController?.pushViewController(vc, animated: true)
-                
+        setupLayout()
+        setupDropDown()
+    }
+    
+    fileprivate func setupLayout() {
+        vwDropDownLeft.layer.cornerRadius = 5
+        vwDropDownLeft.layer.masksToBounds = true
+        vwDropDownRight.layer.cornerRadius = 5
+        vwDropDownRight.layer.masksToBounds = true
+    }
+    
+    fileprivate func setupDropDown() {
+        dropDownLeft = BKDropDown.instance()
+            .bind(["Item 1", "Item 2", "Item 3", "Item 4"])
+            .setLayoutCell(normal: .white, highlight: .lightGray,height: 50)
+            .setLayoutTitle(normal: .darkGray, highlight: .darkGray ,font: UIFont.systemFont(ofSize: 14))
+            .setPadding(leading: 20, trailing: 20)
+            .setDidSelectRowAt({ (_, item, dropDown) in
+                self.lbDropDownLeft.text = item.title
+                dropDown.hide()
+            })
+        
+        dropDownRight = BKDropDown.instance()
+            .bind(["Item 1", "Item 2", "Item 3", "Item 4"])
+            .setLayoutCell(normal: .white, highlight: .lightGray, height: 50)
+            .setLayoutTitle(normal: .darkGray, highlight: .darkGray ,font: UIFont.systemFont(ofSize: 14))
+            .setPadding(leading: 20, trailing: 20)
+            .setDidSelectRowAt({ (_, item, dropDown) in
+                self.lbDropDownRight.text = item.title
                 dropDown.hide()
             })
     }
 
     @IBAction func onClickButton(_ sender: UIButton) {
-        dropDown.show(self, targetView: sender)
+        if sender.tag == 0 {
+            dropDownLeft
+                .setLayoutCell(width:sender.frame.width - 10)
+                .show(self, targetView: sender)
+        } else {
+            dropDownRight.show(self, targetView: sender)
+        }
     }
     
 }
