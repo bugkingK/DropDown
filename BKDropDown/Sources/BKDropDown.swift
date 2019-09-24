@@ -17,42 +17,56 @@ class BKDropDown: UIViewController {
     
     //MARK:- @IBOutlet
     @IBOutlet weak private var tableView:UITableView!
-    @IBOutlet weak private var rootView:CustomBorderView!
+    @IBOutlet weak private var rootView:UIView!
     
-    @IBOutlet weak private var rootViewLeft:NSLayoutConstraint!
-    @IBOutlet weak private var rootViewTop:NSLayoutConstraint!
-    @IBOutlet weak private var rootViewWidth:NSLayoutConstraint!
-    @IBOutlet weak private var rootViewHeight:NSLayoutConstraint!
+    @IBOutlet weak private var rootViewX:NSLayoutConstraint!
+    @IBOutlet weak private var rootViewY:NSLayoutConstraint!
+    
+    @IBOutlet weak private var tableViewWidth:NSLayoutConstraint!
+    @IBOutlet weak private var tableViewHeight:NSLayoutConstraint!
+    @IBOutlet weak private var tableViewTop:NSLayoutConstraint!
+    @IBOutlet weak private var tableViewBottom:NSLayoutConstraint!
+    @IBOutlet weak private var tableViewLeading:NSLayoutConstraint!
+    @IBOutlet weak private var tableViewTrailing:NSLayoutConstraint!
 
+    private struct Appearance {
+        struct Title {
+            var textNormal:UIColor = .black
+            var textHighlight:UIColor = .black
+            var font:UIFont = .systemFont(ofSize: 12)
+            var alignment:NSTextAlignment = .left
+        }
+        
+        struct Cell {
+            var viewNormal:UIColor = .white
+            var viewHighlight:UIColor = .red
+            var rowHeight:CGFloat = 25
+            var visibleItems:Int?
+            var divisionColor:UIColor?
+        }
+        
+        struct Padding {
+            var top:CGFloat = 5
+            var bottom:CGFloat = 5
+            var leading:CGFloat = 15
+            var trailing:CGFloat = 15
+        }
+        var title = Title()
+        var cell = Cell()
+        var padding = Padding()
+    }
+    private var appearance = Appearance()
+    
     /// bind
     private var arrItems:[BKItem] = []
     private var firstItem:Int?
     private var mPrevItem:Int?
     
-    /// setLayoutTitle
-    private var titleTextNormal:UIColor = .black
-    private var titleTextHighlight:UIColor = .black
-    private var titleFont:UIFont = .systemFont(ofSize: 12)
-    private var titleAlignment:NSTextAlignment = .left
-    
-    /// setLayoutCell
-    private var cellViewNormal:UIColor = .white
-    private var cellViewHighlight:UIColor = .red
-    private var cellRowHeight:CGFloat = 25
-    
-    private var cellDivisionColor:UIColor?
+    /// setDelayAnimation
+    private var delayAnimation:TimeInterval = 0.15
     
     /// setLayoutCornerRadius
-    private var rootViewCornerRadius:CGFloat = 5
-    
-    /// setLayoutPadding
-    private struct BKPadding {
-        var top:CGFloat
-        var bottom:CGFloat
-        var left:CGFloat
-        var right:CGFloat
-    }
-    private var rootViewPadding:BKPadding = BKPadding(top: 5, bottom: 5, left: 15, right: 15)
+    private var rootViewCornerRadius:CGFloat = 0
     
     /// setDidSelectRowAt
     typealias EVENT = (Int, BKDropDown)->()
@@ -62,16 +76,22 @@ class BKDropDown: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         rootView.alpha = 0
-        rootView.borderWidth = 0.5
-        rootView.cornerRadius = rootViewCornerRadius
-        rootView.borderColor = .lightGray
+        rootView.layer.borderWidth = 0.5
+        rootView.layer.borderColor = UIColor.lightGray.cgColor
+        rootView.layer.cornerRadius = rootViewCornerRadius
+        rootView.backgroundColor = .white
+        tableView.backgroundColor = .gray
+    }
+    
+    deinit {
+        print("BKDropDown Success")
     }
     
     //MARK:- @Public
-    static public let new: BKDropDown = {
+    static public func instance() -> BKDropDown {
         return UIStoryboard(name: "BKDropDown", bundle: nil)
-                    .instantiateViewController(withIdentifier: "BKDropDown") as! BKDropDown
-    }()
+        .instantiateViewController(withIdentifier: "BKDropDown") as! BKDropDown
+    }
     
     public func bind(_ items:[BKItem], first:Int?=nil) -> BKDropDown {
         if let first = first {
@@ -84,41 +104,51 @@ class BKDropDown: UIViewController {
         return self
     }
     
-    public func setLayoutTitle(_ normal:UIColor?=nil, highlight:UIColor?=nil, font:UIFont?=nil, alignment:NSTextAlignment?=nil) -> BKDropDown {
+    public func setLayoutTitle(normal:UIColor?=nil, highlight:UIColor?=nil, font:UIFont?=nil, alignment:NSTextAlignment?=nil) -> BKDropDown {
         if let font = font {
-            titleFont = font
+            appearance.title.font = font
         }
         if let normal = normal {
-            titleTextNormal = normal
+            appearance.title.textNormal = normal
         }
         if let highlight = highlight {
-            titleTextHighlight = highlight
+            appearance.title.textHighlight = highlight
         }
         if let alignment = alignment {
-            titleAlignment = alignment
+            appearance.title.alignment = alignment
         }
         return self
     }
     
-    public func setLayoutCell(_ normal:UIColor?=nil, highlight:UIColor?=nil, height:CGFloat?=nil) -> BKDropDown {
+    public func setLayoutCell(normal:UIColor?=nil, highlight:UIColor?=nil, height:CGFloat?=nil, visibleItems:Int?=nil) -> BKDropDown {
         if let normal = normal {
-            cellViewNormal = normal
+            appearance.cell.viewNormal = normal
         }
         if let highlight = highlight {
-            cellViewHighlight = highlight
+            appearance.cell.viewHighlight = highlight
         }
         if let height = height {
-            cellRowHeight = height
+            appearance.cell.rowHeight = height
+        }
+        if let visibleItems = visibleItems {
+            appearance.cell.visibleItems = visibleItems
         }
         return self
     }
     
-    public func setLayoutPadding(_ top:CGFloat=0, bottom:CGFloat=0, left:CGFloat=0, right:CGFloat=0) -> BKDropDown {
-        rootViewPadding = BKPadding(top: top, bottom: bottom, left: left, right: right)
+    public func setPadding(top:CGFloat?=nil, bottom:CGFloat?=nil, leading:CGFloat?=nil, trailing:CGFloat?=nil) -> BKDropDown {
+        appearance.padding.top = top ?? 0
+        appearance.padding.bottom = bottom ?? 0
+        appearance.padding.leading = leading ?? 0
+        appearance.padding.trailing = trailing ?? 0
         return self
     }
     
-    public func setLayoutCornerRadius(_ radius:CGFloat) -> BKDropDown {
+    public func setLayer(cornerRadius:CGFloat?=nil, borderWidth:CGFloat?=nil, borderColor:UIColor?=nil) -> BKDropDown {
+        
+        return self
+    }
+    public func setCornerRadius(_ radius:CGFloat) -> BKDropDown {
         rootViewCornerRadius = radius
         return self
     }
@@ -129,7 +159,12 @@ class BKDropDown: UIViewController {
     }
     
     public func setDivisionColor(_ color:UIColor) -> BKDropDown {
-        cellDivisionColor = color
+        appearance.cell.divisionColor = color
+        return self
+    }
+    
+    public func setDelayAnimation(_ interval:TimeInterval) -> BKDropDown {
+        delayAnimation = interval
         return self
     }
     
@@ -144,19 +179,19 @@ class BKDropDown: UIViewController {
     }
     
     public func show(_ target:UIViewController, targetFrame:CGRect) {
-        // DispatchQueue.main
-        
         target.present(self, animated: false) { [weak self] in
             guard let `self` = self else { return }
-            let paddingHeight = self.rootViewPadding.top + self.rootViewPadding.bottom
-            self.rootViewLeft.constant = targetFrame.origin.x
-            self.rootViewTop.constant = targetFrame.origin.y + targetFrame.height
-            self.rootViewWidth.constant = targetFrame.size.width
-            // 여기서 보여줄 Cell의 갯수를 입력받으면 제한을 걸어야함
-            /*
-             if ~~가 있다면 (갯수 * self.cellRowHeight) + paddingHeight
-             */
-            self.rootViewHeight.constant = (CGFloat(self.arrItems.count) * self.cellRowHeight) + paddingHeight
+            self.tableViewTop.constant = self.appearance.padding.top
+            self.tableViewBottom.constant = self.appearance.padding.bottom
+            self.tableViewLeading.constant = self.appearance.padding.leading
+            self.tableViewTrailing.constant = self.appearance.padding.trailing
+            
+            self.rootViewX.constant = targetFrame.origin.x
+            self.rootViewY.constant = targetFrame.origin.y + targetFrame.height
+            self.tableViewWidth.constant = targetFrame.size.width
+            // 보여줄 Cell의 갯수를 입력받으면 제한을 건다
+            let visibleItems = self.appearance.cell.visibleItems == nil ? self.arrItems.count : self.appearance.cell.visibleItems!
+            self.tableViewHeight.constant = (CGFloat(visibleItems) * self.appearance.cell.rowHeight)
             
             var targetViewHeight:CGFloat = target.view.frame.height
             
@@ -165,25 +200,25 @@ class BKDropDown: UIViewController {
             }
             
             // DropDown뷰의 위치Y+높이가 보여질 뷰보다 클 경우 DropUp으로 전환
-            let isDropUp:Bool = self.rootViewTop.constant + self.rootViewHeight.constant > targetViewHeight
+            let isDropUp:Bool = self.rootViewY.constant + self.tableViewHeight.constant > targetViewHeight
             if isDropUp {
-                let isReverse = (targetViewHeight/2 + UIApplication.shared.statusBarFrame.height + targetFrame.height) < self.rootViewTop.constant
+                let isReverse = (targetViewHeight/2 + UIApplication.shared.statusBarFrame.height + targetFrame.height) < self.rootViewY.constant
                 if !isReverse {
                     // 반전 X
-                    self.rootViewHeight.constant = targetViewHeight - self.rootViewTop.constant
+                    self.tableViewHeight.constant = targetViewHeight - self.rootViewY.constant
                     
                 } else {
                     // 반전 O, 조건 = 반전 안했을때의 높이값보다 반전했을때의 높이값이 아이템을 더 많이 보여줄 수 있을 경우
                     // 기준 = 뷰중앙 + 타겟뷰의 높이값이 DropDown rootViewTop보다 작을 경우
                     // DropDown메뉴가 작을 수 있음
-                    let height1 = self.rootViewHeight.constant // 기존 사이즈
+                    let height1 = self.tableViewHeight.constant // 기존 사이즈
                     let height2 = targetFrame.origin.y - UIApplication.shared.statusBarFrame.height // 뷰에 표시할 수 있는 최상단
                     if height1 < height2 { // DropDown메뉴 크기가 작을 경우
-                        self.rootViewTop.constant = targetFrame.origin.y - height1
+                        self.rootViewY.constant = targetFrame.origin.y - height1
                         
                     } else {
-                        self.rootViewHeight.constant = height2
-                        self.rootViewTop.constant = UIApplication.shared.statusBarFrame.height
+                        self.tableViewHeight.constant = height2
+                        self.rootViewY.constant = UIApplication.shared.statusBarFrame.height
                     }
                 }
             }
@@ -196,7 +231,7 @@ class BKDropDown: UIViewController {
                 }
             }
             
-            UIView.animate(withDuration: 0.15) {
+            UIView.animate(withDuration: self.delayAnimation) {
                 self.rootView.alpha = 1
             }
         }
@@ -207,7 +242,7 @@ class BKDropDown: UIViewController {
     }
     
     public func hide(_ completion:(()->())?=nil) {
-        UIView.animate(withDuration: 0.15, animations: {
+        UIView.animate(withDuration: delayAnimation, animations: {
             self.rootView.alpha = 0
         }) { (finished) in
             if finished {
@@ -225,29 +260,28 @@ extension BKDropDown: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = arrItems[indexPath.row]
+        let row = indexPath.row
+        let item = arrItems[row]
         let identifier = item.image != nil ? "BKDropDownImageCell" : "BKDropDownCell"
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? BKDropDownCell else {
             return UITableViewCell.init()
         }
         
         cell.lbTitle.text = item.title
-        cell.lbTitle.font = titleFont
-        cell.lbTitle.textColor = titleTextNormal
-        cell.lbTitle.highlightedTextColor = titleTextHighlight
-        cell.lbTitle.textAlignment = titleAlignment
+        cell.lbTitle.font = appearance.title.font
+        cell.lbTitle.textColor = appearance.title.textNormal
+        cell.lbTitle.highlightedTextColor = appearance.title.textHighlight
+        cell.lbTitle.textAlignment = appearance.title.alignment
         cell.ivLogo?.image = item.image
-        cell.paddingLeft.constant = rootViewPadding.left
-        cell.paddingRight.constant = rootViewPadding.right
         
-        cell.backgroundColor = cellViewNormal
+        cell.backgroundColor = appearance.cell.viewNormal
         let selectionView = UIView.init()
-        selectionView.backgroundColor = cellViewHighlight
+        selectionView.backgroundColor = appearance.cell.viewHighlight
         cell.selectedBackgroundView = selectionView
         
         // Add Division Line
-        guard indexPath.row == arrItems.count-1,
-            let divisionColor = cellDivisionColor else {
+        // TODO:- 왜 마지막 셀에 Division Line이 생성되는거지?
+        guard row < arrItems.count-1, let divisionColor = appearance.cell.divisionColor else {
             return cell
         }
         
@@ -265,13 +299,11 @@ extension BKDropDown: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellRowHeight
+        return appearance.cell.rowHeight
     }
 }
 
 class BKDropDownCell: UITableViewCell {
-    @IBOutlet fileprivate var paddingLeft: NSLayoutConstraint!
-    @IBOutlet fileprivate var paddingRight: NSLayoutConstraint!
     @IBOutlet fileprivate weak var lbTitle:UILabel!
     @IBOutlet fileprivate weak var ivLogo:UIImageView?
 }

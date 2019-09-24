@@ -11,6 +11,9 @@ import UIKit
 class ViewController: UIViewController {
     
     private var dropDown:BKDropDown!
+    private var dropDown2:BKDropDown!
+    
+    var bTest = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,15 +25,36 @@ class ViewController: UIViewController {
             BKItem(title: "하이4", image: nil),
             BKItem(title: "하이5", image: nil),
         ]
-        dropDown = BKDropDown.new
-            .bind(items, first: 4)
+        dropDown = BKDropDown.instance()
+            .bind(items, first: 2)
+            .setLayoutCell(visibleItems: 2)
+            .setLayoutCell(normal: .gray)
+            .setLayoutTitle(alignment: .center)
+            .setPadding(top: 10, bottom: 10)
+            .setDivisionColor(.brown)
+            .setDidSelectRowAt({ (idx, dropDown) in
+                dropDown.hide()
+            })
+        
+        dropDown2 = BKDropDown.instance()
+            .bind(items, first: 1)
+            .setLayoutCell(normal: .gray)
+            .setLayoutTitle(alignment: .center)
+            .setPadding(top: 10, bottom: 10)
+            .setDivisionColor(.brown)
             .setDidSelectRowAt({ (idx, dropDown) in
                 dropDown.hide()
             })
     }
 
     @IBAction func onClickButton(_ sender: UIButton) {
-        dropDown.show(self, targetView: sender)
+        bTest = !bTest
+        if bTest {
+            dropDown.show(self, targetView: sender)
+        } else {
+            dropDown2.show(self, targetView: sender)
+        }
+        
     }
     
 }
