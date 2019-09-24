@@ -293,21 +293,15 @@ extension BKDropDown: UITableViewDelegate, UITableViewDataSource {
         cell.ivLogo?.image = item.image
         
         cell.backgroundColor = appearance.cell.viewNormal
-        let selectionView = UIView.init()
-        selectionView.backgroundColor = appearance.cell.viewHighlight
-        cell.selectedBackgroundView = selectionView
+        cell.selectedBackgroundView?.backgroundColor = appearance.cell.viewHighlight
         
         // Add Division Line
-        // TODO:- 왜 마지막 셀에 Division Line이 생성되는거지?
-        guard row < arrItems.count-1, let divisionColor = appearance.cell.divisionColor else {
+        guard let divisionColor = appearance.cell.divisionColor else {
             return cell
         }
         
-        let divisionView = UIView(frame: CGRect(x: 10, y: cell.frame.height-1.0, width: cell.frame.width-20.0, height: 1))
-        divisionView.backgroundColor = divisionColor
-        divisionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        selectionView.addSubview(divisionView)
-        cell.addSubview(divisionView)
+        cell.divisionView.backgroundColor = divisionColor
+        cell.divisionView.isHidden = row >= arrItems.count-1
         return cell
     }
     
@@ -324,4 +318,15 @@ extension BKDropDown: UITableViewDelegate, UITableViewDataSource {
 class BKDropDownCell: UITableViewCell {
     @IBOutlet fileprivate weak var lbTitle:UILabel!
     @IBOutlet fileprivate weak var ivLogo:UIImageView?
+    
+    fileprivate var divisionView:UIView!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        let selectionView = UIView.init()
+        self.selectedBackgroundView = selectionView
+        divisionView = UIView(frame: CGRect(x: 10, y: self.frame.height-1.0, width: self.frame.width-20.0, height: 1))
+        divisionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        selectionView.addSubview(divisionView)
+        self.addSubview(divisionView)
+    }
 }

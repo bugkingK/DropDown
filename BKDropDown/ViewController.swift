@@ -36,8 +36,9 @@ class ViewController: UIViewController {
         
         dropDown2 = BKDropDown.instance()
             .bind(items, first: 1)
-            .setLayoutCell(normal: .gray)
+            .setLayoutCell(normal: .white, divisionColor: .green)
             .setLayoutTitle(alignment: .center)
+            .setViewLayer(cornerRadius: 5, borderWidth: 1, borderColor: .lightGray)
             .setPadding(top: 10, bottom: 10)
             .setDidSelectRowAt({ (idx, dropDown) in
                 dropDown.hide()
