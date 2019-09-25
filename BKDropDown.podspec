@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "BKDropDown"
-  s.version      = "1.0.2"
+  s.version      = "1.0.3"
   s.summary      = "An API for DropDown with streams similar Rx"
   s.description  = <<-DESC
 An API for DropDown with streams similar Rx, Implement options as simple functions
