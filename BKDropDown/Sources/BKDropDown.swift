@@ -9,8 +9,8 @@
 import UIKit
 
 public struct BKItem {
-    var title:String
-    var image:UIImage?
+    public var title:String
+    public var image:UIImage?
 }
 
 open class BKDropDown: UIViewController {
@@ -89,8 +89,8 @@ open class BKDropDown: UIViewController {
     
     //MARK:- @Public
     static public func instance() -> BKDropDown {
-        return UIStoryboard(name: "BKDropDown", bundle: nil)
-                .instantiateViewController(withIdentifier: "BKDropDown") as! BKDropDown
+        return UIStoryboard(name: "BKDropDown", bundle: Bundle(identifier: "org.cocoapods.BKDropDown"))
+                .instantiateInitialViewController() as! BKDropDown
     }
     
     public func bind(_ items:[String], first:Int?=nil) -> BKDropDown {
