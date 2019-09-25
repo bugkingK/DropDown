@@ -8,12 +8,12 @@
 
 import UIKit
 
-struct BKItem {
-    var title:String
-    var image:UIImage?
+public struct BKItem {
+    public var title:String
+    public var image:UIImage?
 }
 
-class BKDropDown: UIViewController {
+open class BKDropDown: UIViewController {
     
     //MARK:- @IBOutlet
     @IBOutlet weak private var tableView:UITableView!
@@ -73,11 +73,11 @@ class BKDropDown: UIViewController {
     private var delayAnimation:TimeInterval = 0.2
     
     /// setDidSelectRowAt
-    typealias EVENT = (Int, BKItem, BKDropDown)->()
+    public typealias EVENT = (Int, BKItem, BKDropDown)->()
     private var didSelectEvent:EVENT?
     
     //MARK:- @Inner
-    override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         rootView.alpha = 0
         rootView.layer.borderWidth = appearance.view.borderWidth
@@ -89,8 +89,8 @@ class BKDropDown: UIViewController {
     
     //MARK:- @Public
     static public func instance() -> BKDropDown {
-        return UIStoryboard(name: "BKDropDown", bundle: nil)
-                .instantiateViewController(withIdentifier: "BKDropDown") as! BKDropDown
+        return UIStoryboard(name: "BKDropDown", bundle: Bundle(identifier: "org.cocoapods.BKDropDown"))
+                .instantiateInitialViewController() as! BKDropDown
     }
     
     public func bind(_ items:[String], first:Int?=nil) -> BKDropDown {
@@ -284,11 +284,11 @@ class BKDropDown: UIViewController {
 }
 
 extension BKDropDown: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrItems.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
         let item = arrItems[row]
         let identifier = item.image != nil ? "BKDropDownImageCell" : "BKDropDownCell"
@@ -311,13 +311,13 @@ extension BKDropDown: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         mPrevItem = row
         didSelectEvent?(row, arrItems[row], self)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return appearance.cell.rowHeight
     }
 }
