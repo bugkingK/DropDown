@@ -11,6 +11,9 @@ pod 'BKDropDown'
 Copy <i>BKDropDown.swift, BKDropDown.storyboard</i> to your project.
 </pre>
 
+## Preview
+![](/img-preview.jpg)
+
 ## Using
 
 ```swift
